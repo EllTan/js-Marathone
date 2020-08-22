@@ -1,22 +1,91 @@
-let phoneNumber ='+71234567890';
-let phoneFormatted ='';
+const $btn = document.getElementById('btn-kick');
+const $btnSuper = document.getElementById('btn-super');
 
-function formattedPhone(phone) {
-    for (let i = 0; i<phoneNumber.length;i++){
-        phoneFormatted += phoneNumber.charAt(i);
-        if(i==1){
-            phoneFormatted+=' '+'(';            
-        }
-        if(i==4){
-            phoneFormatted+=')'+' ';
-        }
-        if(i==7|i==9){
-            phoneFormatted+='-';
-        }
-        
-    }
-    return phoneFormatted;
-}   
+const character = {
+    name: 'Pikachu',
+    defaultHP: 100,
+    damageHP: 100,
+    elHP: document.getElementById('health-character'),
+    elProgressbar: document.getElementById('progressbar-character'),
+}
+
+const enemy = {
+    name: 'Charmander',
+    defaultHP: 100,
+    damageHP: 100,
+    elHP: document.getElementById('health-enemy'),
+    elProgressbar: document.getElementById('progressbar-enemy'),
     
+}
+$btnSuper.disabled=true;
+$btn.addEventListener('click', function () {    
+    console.log('Kick');
+    changeHP(random(15), character);
+    changeHP(random(15), enemy);
+    if (character.damageHP<=50){
+        $btnSuper.disabled=false;
+    }  
+    
+});
 
-console.log(formattedPhone('+71234567890'));
+$btnSuper.addEventListener('click', function(){        
+    console.log('Super Shot');
+    changeHP(randomSuper(12,35), character);
+    changeHP(randomSuper(8,30), enemy);    
+
+})
+
+function init(){
+    console.log('Start Game!');
+    renderHP(character);    
+    renderHP(enemy);    
+}
+
+function renderHP(person){ 
+    renderLife(person);
+    renderProgressbarHP(person);
+}
+
+function changeHP(count, person){
+    if (person.damageHP<count){
+        person.damageHP=0;
+        alert('Бедный ' + person.name + ' проиграл бой');
+        $btn.disabled = true;
+        $btnSuper.disabled = true;
+    } else{
+        person.damageHP -= count;
+    }
+    
+    renderHP(person);
+}
+
+function renderLife(person){    /* изменение значения HP*/
+    person.elHP.innerText = person.damageHP + '/' + person.defaultHP;
+}
+
+function renderProgressbarHP(person){ /*перерисовка прогрессбара*/
+    person.elProgressbar.style.width = person.damageHP + '%';
+    
+}
+
+function randomSuper(numMin,numMax){
+    randomMin = Math.ceil(Math.random()*numMin);
+    randomMax = Math.ceil(Math.random()*numMax);
+    if(randomMin<numMin){
+        randomMin+=6;
+    }
+    if(randomMax>randomMin){
+        result = randomMax-randomMin;
+    } else {
+        result = randomMin;
+    }
+    
+    return result;
+}
+
+function random(num){
+    console.log(Math.random);
+    return Math.ceil(Math.random()*num) /*num для корректировки рандома. т.е можно выставить потолок. например random(20)*/
+}
+
+init();
