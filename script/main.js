@@ -1,5 +1,9 @@
 const $btn = document.getElementById('btn-kick');
 const $btnSuper = document.getElementById('btn-super');
+const $btnAgain = document.getElementById('btn-again');
+
+$btnSuper.disabled=true;
+$btnAgain.disabled=true;
 
 const character = {
     name: 'Pikachu',
@@ -17,7 +21,7 @@ const enemy = {
     elProgressbar: document.getElementById('progressbar-enemy'),
     
 }
-$btnSuper.disabled=true;
+
 $btn.addEventListener('click', function () {    
     console.log('Kick');
     changeHP(random(15), character);
@@ -33,6 +37,10 @@ $btnSuper.addEventListener('click', function(){
     changeHP(randomSuper(12,35), character);
     changeHP(randomSuper(8,30), enemy);    
 
+})
+
+$btnAgain.addEventListener('click', function(){
+    history.go(0);
 })
 
 function init(){
@@ -52,6 +60,7 @@ function changeHP(count, person){
         alert('Бедный ' + person.name + ' проиграл бой');
         $btn.disabled = true;
         $btnSuper.disabled = true;
+        $btnAgain.disabled=false;
     } else{
         person.damageHP -= count;
     }
